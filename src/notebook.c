@@ -945,16 +945,9 @@ gboolean close_page(GtkWidget *vte, gint close_type)
 				GtkWidget *current_vte_orig = win_data->current_vte;
 				win_data->current_vte = vte;
 
-				GtkResponseType return_value = dialog(NULL, CONFIRM_TO_CLOSE_RUNNING_APPLICATION);
+				//GtkResponseType return_value = dialog(NULL, CONFIRM_TO_CLOSE_RUNNING_APPLICATION);
 				// restore win_data->current_vte
 				win_data->current_vte = current_vte_orig;
-
-				if (return_value != GTK_RESPONSE_OK)
-				{
-					g_string_free(child_process_list, TRUE);
-					g_strfreev(stats);
-					return FALSE;
-				}
 			}
 		}
 		g_strfreev(stats);
@@ -973,13 +966,7 @@ gboolean close_page(GtkWidget *vte, gint close_type)
 		// Or the "%d tab" of dialog will incorrect if we click the [X] on a tab that is not on focus.
 		GtkWidget *oldvte = win_data->current_vte;
 		win_data->current_vte = vte;
-		if (!display_child_process_dialog(child_process_list, win_data,
-						  CONFIRM_TO_CLOSE_A_TAB_WITH_CHILD_PROCESS))
-		{
-			g_string_free(child_process_list, TRUE);
-			win_data->current_vte = oldvte;
-			return FALSE;
-		}
+
 		// Switch back
 		win_data->current_vte = oldvte;
 	}

@@ -1107,52 +1107,6 @@ GtkResponseType dialog(GtkWidget *widget, gsize style)
 
 			break;
 		}
-		case CONFIRM_TO_CLOSE_RUNNING_APPLICATION:			// 7
-		{
-			selectable = TRUE;
-			// get the command line of running foreground program
-			pid_t tpgid = get_tpgid(page_data->pid);
-			temp_str[0] = get_cmdline(tpgid);
-			temp_str[1] = g_strdup_printf("(%d) %s", tpgid, temp_str[0]);
-			temp_str[2] = g_markup_escape_text(temp_str[1], -1);
-			temp_str[3] = g_strdup_printf(_("There is still a running foreground program on this tab:"));
-			temp_str[4] = g_strdup_printf(_("Terminate it by using `kill -9 %d' is recommended "
-							"if it is non-response."), page_data->current_tpgid);
-			temp_str[5] = g_strconcat(temp_str[3],
-						  "\n\n\t<b><span foreground=\"blue\">",
-						  temp_str[2],
-						  "</span></b>\n\n",
-						  _("Continue anyway?"),
-						  "\n\n<span foreground=\"darkred\">",
-						  _("Tip:"),
-						  " ",
-						  temp_str[4],
-						  "</span>",
-						  NULL);
-
-			if ((g_list_length(window_list) > 1) || (dialog_data->total_page>1))
-				create_entry_hbox = BOX_VERTICALITY;
-
-			create_dialog(_("Confirm to close running foreground program"),
-				      "Confirm to close running foreground program",
-				      DIALOG_OK_CANCEL,
-				      page_data->window,
-				      FALSE,
-				      FALSE,
-				      10,
-				      GTK_RESPONSE_OK,
-				      GTK_FAKE_STOCK_DIALOG_QUESTION,
-				      temp_str[5],
-				      selectable,
-				      70,
-				      TRUE,
-				      create_entry_hbox,
-				      5,
-				      dialog_data);
-
-			create_SIGKILL_and_EXIT_widget(dialog_data, FALSE, create_entry_hbox, _("this tab"));
-			break;
-		}
 		case CHANGE_THE_OPACITY_OF_WINDOW:				// 8
 		case CHANGE_THE_OPACITY_OF_WINDOW_WHEN_INACTIVE:
 		{
